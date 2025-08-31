@@ -28,6 +28,40 @@ Agentic API is a sophisticated, asynchronous AI agent system built with FastAPI 
 - **Task Orchestration**: Custom JobsOrchestrator
 - **Agent System**: PeerAgent, CodeAgent, ContentAgent
 
+## LLM Model Selection Strategy
+
+The system uses different LLM models for each agent type, optimized for their specific roles. Model names are configured via environment variables:
+
+- `LLM_MODEL_ROUTER` - For PeerAgent routing decisions
+- `LLM_MODEL_CONTENT` - For ContentAgent research and content generation
+- `LLM_MODEL_CODE` - For CodeAgent code generation
+
+### Model Selection Rationale
+
+**Router (PeerAgent)**: **Fast & Cost-Effective**
+- **Model**: "Mini" class chat model (e.g., `gpt-4o-mini` equivalent)
+- **Why**: Only handles routing decisions with short prompts
+- **Parameters**: `temperature≈0.0–0.2`, `max_tokens≈64`
+- **Goal**: Low latency, minimal cost for simple classification tasks
+
+**ContentAgent**: **Quality & Accuracy**
+- **Model**: "Mid-to-high" quality general model (e.g., `gpt-4o` equivalent)
+- **Why**: Fluent responses with source integration and factual accuracy
+- **Parameters**: `temperature≈0.3–0.5`, `max_tokens` based on task size
+- **Goal**: High-quality content with proper source attribution
+
+**CodeAgent**: **Code-Centric Capability**
+- **Model**: Code-focused powerful model (e.g., **code-specialized** variants)
+- **Why**: Correct syntax, longer context handling, code generation expertise
+- **Parameters**: `temperature≈0.2–0.3`, `presence_penalty=0`, `top_p≈0.9`
+- **Goal**: Accurate, well-structured code output with explanations
+
+### Why This Separation?
+
+- **Cost Efficiency**: Using expensive models for simple routing tasks is wasteful
+- **Specialized Performance**: Content and code generation require different strengths; independent model selection improves quality
+- **Flexibility**: All models configurable via environment variables → supports cloud/hybrid/on-premise model deployments
+
 ## System Architecture
 
 For visual representations of the system architecture and sequence flows, please refer to the following diagrams:
