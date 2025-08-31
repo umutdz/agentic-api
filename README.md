@@ -154,7 +154,7 @@ graph TB
 ```
 
 
-### Logging Strategy and Architectural Decisions
+## Logging Strategy and Architectural Decisions
 
 **MongoDB-based Logging**: We chose MongoDB for logging due to its flexible schema, excellent write performance, and natural fit for event-driven architectures. The `log_events` collection captures every critical step of the task lifecycle, enabling comprehensive debugging and monitoring.
 
@@ -192,23 +192,6 @@ For detailed Docker setup instructions, please refer to our [Docker Setup Guide]
 
 ## API Usage
 For comprehensive API documentation and usage examples, please refer to our [API Usage Guide](docs/api-usage.md).
-
-### Quick Start
-```bash
-# Execute a task
-POST /api/v1/agent/execute
-Authorization: Bearer <jwt_token>
-Idempotency-Key: <unique_key>
-Content-Type: application/json
-
-{
-  "task": "Create a Python function to calculate fibonacci numbers"
-}
-
-# Check job status
-GET /api/v1/agent/jobs/{job_id}
-Authorization: Bearer <jwt_token>
-```
 
 ## Remaining Tasks
 - [ ] Implement comprehensive test coverage
