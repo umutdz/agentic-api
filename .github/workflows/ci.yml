@@ -1,0 +1,43 @@
+name: CI & Pre-Commit Checks
+
+on:
+  pull_request:
+    branches: [ "develop" ]
+  workflow_dispatch:
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    env:
+      PYTHON_VERSION: 3.10.0
+      # TODO: Configure env variables for CI environment
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        run: |
+          pip install uv
+
+      - name: Install dependencies with uv
+        run: |
+          uv venv --python ${{ env.PYTHON_VERSION }}
+          source .venv/bin/activate
+          uv sync && uv sync --dev
+
+      - name: Lint with Pre-commit
+        run: |
+          uv run pre-commit run --all-files --show-diff-on-failure
+
+      - name: Run Pytest
+        run: |
+          uv run pytest -v
+
+      # TODO: Uncomment this when we have behave tests
+      # - name: Run Behave tests
+      #   run: |
+      #     uv run behave tests/features/
