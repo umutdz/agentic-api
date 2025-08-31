@@ -51,13 +51,13 @@ RABBITMQ_URL=amqp://guest:guest@localhost:5672/
 ### 3. Build and Start Services
 ```bash
 # Build all services
-docker-compose build --no-cache
+docker compose build --no-cache
 
 # Start all services
-docker-compose up -d
+docker compose up -d
 
 # Verify services are running
-docker-compose ps
+docker compose ps
 ```
 
 ### 4. Access Services
@@ -66,7 +66,13 @@ Once all services are running, you can access:
 - **API Documentation**: http://localhost:8000/docs
 - **Celery Flower Dashboard**: http://localhost:5555
 - **MongoDB**: localhost:27017
+- **Mongo Express (MongoDB Admin)**: http://localhost:8081
+  - **Username**: `admin`
+  - **Password**: `pass`
 - **PostgreSQL**: localhost:5432
+- **pgAdmin (PostgreSQL Admin)**: http://localhost:81
+  - **Email**: Configured via `PGADMIN_DEFAULT_EMAIL` in `.env`
+  - **Password**: Configured via `PGADMIN_DEFAULT_PASSWORD` in `.env`
 - **Redis**: localhost:6379
 - **RabbitMQ Management**: http://localhost:15672 (guest/guest)
 
@@ -135,19 +141,19 @@ chmod +x scripts/migrations.sh
 #### Service Won't Start
 ```bash
 # Check service logs
-docker-compose logs <service_name>
+docker compose logs <service_name>
 
 # Verify environment variables
-docker-compose config
+docker compose config
 
 # Rebuild service
-docker-compose build --no-cache <service_name>
+docker compose build --no-cache <service_name>
 ```
 
 #### Database Connection Issues
 ```bash
 # Check database status
-docker-compose ps mongodb postgres
+docker compose ps mongodb postgres
 
 # Verify connection strings in .env
 # Ensure ports are not conflicting with local services
@@ -156,25 +162,25 @@ docker-compose ps mongodb postgres
 #### Celery Worker Issues
 ```bash
 # Check worker logs
-docker-compose logs -f celery
+docker compose logs -f celery
 
 # Restart worker
-docker-compose restart celery
+docker compose restart celery
 
 # Verify RabbitMQ is running
-docker-compose exec rabbitmq rabbitmqctl status
+docker compose exec rabbitmq rabbitmqctl status
 ```
 
 ### Performance Tuning
 ```bash
 # Increase worker count
-docker-compose up -d --scale celery=4
+docker compose up -d --scale celery=4
 
 # Monitor resource usage
 docker stats
 
 # Check queue status
-docker-compose exec rabbitmq rabbitmqctl list_queues
+docker compose exec rabbitmq rabbitmqctl list_queues
 ```
 
 ## Next Steps
